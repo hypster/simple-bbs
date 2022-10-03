@@ -2,10 +2,13 @@
 include_once '../inc/config.inc.php';
 include_once '../inc/mysql.inc.php';
 $link=connect();
+
+$template['title']='父版块列表页';
+$template['css']=array('style/public.css');
 ?>
 <?php include 'inc/header.inc.php'?>
 <div id="main">
-	<div class="title">父版块列表</div>
+	<div class="title">父版块表方法</div>
 	<table class="list">
 		<tr>
 			<th>排序</th>	 	 	
@@ -24,7 +27,7 @@ $html=<<<A
 			<tr>
 				<td><input class="sort" type="text" name="sort" /></td>
 				<td>{$data['module_name']}[id:{$data['id']}]</td>
-				<td><a href="#">[访问]</a>&nbsp;&nbsp;<a href="#">[编辑]</a>&nbsp;&nbsp;<a href="$delete_url">[删除]</a></td>
+				<td><a href="#">[访问]</a>&nbsp;&nbsp;<a href="father_module_update.php?id={$data['id']}">[编辑]</a>&nbsp;&nbsp;<a href="$delete_url">[删除]</a></td>
 			</tr>
 A;
 			echo $html;

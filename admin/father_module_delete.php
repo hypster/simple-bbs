@@ -7,6 +7,11 @@ if(!isset($_GET['id']) || !is_numeric($_GET['id'])){
 }
 
 $link=connect();
+$query = "select * from sfk_son_module where father_module_id={$_GET['id']}";
+execute($link, $query);
+if (mysqli_num_rows($link)) {
+    skip('father_module.php', 'error', '对不起，该版块下已添加子版块，请先删除子版块。');
+}
 $query="delete from sfk_father_module where id={$_GET['id']}";
 execute($link,$query);
 if(mysqli_affected_rows($link)==1){

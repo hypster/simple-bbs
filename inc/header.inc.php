@@ -5,8 +5,11 @@
 <title></title>
 <meta name="keywords" content="" />
 <meta name="description" content="" />
-<link rel="stylesheet" type="text/css" href="style/public.css" />
-<link rel="stylesheet" type="text/css" href="style/register.css" />
+<?php 
+foreach ($template['css'] as $val){
+	echo "<link rel='stylesheet' type='text/css' href='{$val}' />";
+}
+?>
 </head>
 <body>
 	<div class="header_wrap">

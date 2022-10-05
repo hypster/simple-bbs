@@ -18,6 +18,8 @@ if(isset($_POST['submit'])){
 		skip('register.php','eror','注册失败,请重试！');
 	}
 }
+$template['title']='注册页';
+$template["css"] = array("style/public.css","style/register.css");
 ?>
 <?php include_once 'inc/header.inc.php'; ?>
 	<div id="register" class="auto">

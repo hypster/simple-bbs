@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8" />
-<title></title>
+<title><?php echo $template['title'];?></title>
 <meta name="keywords" content="" />
 <meta name="description" content="" />
 <?php 
@@ -16,7 +16,7 @@ foreach ($template['css'] as $val){
 		<div id="header" class="auto">
 			<div class="logo">sifangku</div>
 			<div class="nav">
-				<a class="hover">首页</a>
+				<a href='/learn/bbs' class="hover">首页</a>
 			</div>
 			<div class="serarch">
 				<form>
@@ -25,8 +25,15 @@ foreach ($template['css'] as $val){
 				</form>
 			</div>
 			<div class="login">
-				<a>登录</a>&nbsp;
-				<a>注册</a>
+                            <?php 
+                            if ($member_id) {
+                                echo "<a>欢迎回来, {$_COOKIE['sfk']['name']}</a>";
+                            } else {
+                                echo "<a href='login.php'>登录</a>&nbsp;
+				<a href='register.php'>注册</a>";
+                            }
+                            ?>
+                            
 			</div>
 		</div>
 	</div>

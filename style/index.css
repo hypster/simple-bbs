@@ -50,7 +50,9 @@
 	color:#105cb6;
 	font-weight:bold;
 }
-
+.box .title a{
+  color:#105cb6;
+}
 .box .classList {
 	background:#ffffff;
 	padding:0 15px;

@@ -26,7 +26,7 @@ while ($father_data = mysqli_fetch_assoc($father_result)) { ?>
 
             <div class="box auto">
 		<div class="title">
-			<?php echo $father_data['module_name']; ?>
+                        <?php echo "<a href='list_father.php?id={$father_data['id']}'>{$father_data['module_name']}</a>";?>
 		</div>
                 <?php 
                 $query = "select * from sfk_son_module where father_module_id={$father_data['id']}";

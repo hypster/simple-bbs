@@ -22,7 +22,7 @@ $template['css']=array('style/public.css','style/publish.css');
 ?>
 <?php include 'inc/header.inc.php'?>
 	<div id="position" class="auto">
-		 <a>首页</a> &gt; 发布帖子
+		 <a href='index.php'>首页</a> &gt; 发布帖子
 	</div>
 	<div id="publish">
 		<form method="post">

@@ -40,7 +40,7 @@ while ($father_data = mysqli_fetch_assoc($father_result)) { ?>
                           $html=<<<html
                                 <div class="classList">
                             <div class="childBox new">
-                                    <h2><a href="#">{$son_data['module_name']}</a> <span>(今日{$today_count})</span></h2>
+                                    <h2><a href="list_son.php?id={$son_data['id']}">{$son_data['module_name']}</a> <span>(今日{$today_count})</span></h2>
                                     帖子：{$total_count}<br />
                             </div>
                             <div style="clear:both;"></div>

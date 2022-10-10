@@ -7,53 +7,59 @@ $link=connect();
 $member_id=is_login($link);
 
 if(!isset($_GET['id']) || !is_numeric($_GET['id'])){
-	skip('index.php', 'error', '父版块id参数不合法!');
+	skip('index.php', 'error', '子版块id参数不合法!');
 }
-$query="select * from sfk_father_module where id={$_GET['id']}";
-$result_father=execute($link, $query);
-if(mysqli_num_rows($result_father)==0){
-	skip('index.php', 'error', '父版块不存在!');
+$query="select * from sfk_son_module where id={$_GET['id']}";
+$result_son=execute($link,$query);
+if(mysqli_num_rows($result_son)!=1){
+	skip('index.php', 'error', '子版块不存在!');
 }
+$data_son=mysqli_fetch_assoc($result_son);
+$query="select * from sfk_father_module where id={$data_son['father_module_id']}";
+$result_father=execute($link,$query);
 $data_father=mysqli_fetch_assoc($result_father);
 
-$query="select * from sfk_son_module where father_module_id={$_GET['id']}";
-$result_son=execute($link,$query);
-$id_son='';
-$son_list='';
-while($data_son=mysqli_fetch_assoc($result_son)){
-	$id_son.=$data_son['id'].',';
-	$son_list.="<a>{$data_son['module_name']}</a> ";
-}
-$id_son=trim($id_son,',');
-if($id_son==''){
-	$id_son='-1';
-}
-$query="select count(*) from sfk_content where module_id in({$id_son})";
+$query="select count(*) from sfk_content where module_id={$_GET['id']}";
 $count_all=num($link,$query);
-$query="select count(*) from sfk_content where module_id in({$id_son}) and time>CURDATE()";
+$query="select count(*) from sfk_content where module_id={$_GET['id']} and time>CURDATE()";
 $count_today=num($link,$query);
 
-$template['title']='父版块列表页';
+$query="select * from sfk_member where id={$data_son['member_id']}";
+$result_member=execute($link, $query);
+
+$template['title']='子版块列表页';
 $template['css']=array('style/public.css','style/list.css');
 ?>
 <?php include 'inc/header.inc.php'?>
 <div id="position" class="auto">
-	 <a href="index.php">首页</a> &gt; <a href="list_father.php?id=<?php echo $data_father['id']?>"><?php echo $data_father['module_name']?></a>
+	 <a href="index.php">首页</a> &gt; <a href="list_father.php?id=<?php echo $data_father['id']?>"><?php echo $data_father['module_name']?></a> &gt; <?php echo $data_son['module_name']?>
 </div>
 <div id="main" class="auto">
 	<div id="left">
 		<div class="box_wrap">
-			<h3><?php echo $data_father['module_name']?></h3>
+			<h3><?php echo $data_son['module_name']?></h3>
 			<div class="num">
 			    今日：<span><?php echo $count_today?></span>&nbsp;&nbsp;&nbsp;
 			    总帖：<span><?php echo $count_all?></span>
-			  <div class="moderator"> 子版块：  <?php echo $son_list?></div>
 			</div>
+			<div class="moderator">版主：
+				<span>
+					<?php
+						if(mysqli_num_rows($result_member)==0){
+							echo '暂无版主';
+						}else{
+							$data_member=mysqli_fetch_assoc($result_member);
+							echo $data_member['name'];
+						}
+					?>
+				</span>
+			</div>
+			<div class="notice"><?php echo $data_son['info']?></div>
 			<div class="pages_wrap">
-                            <a class="btn publish" href="publish.php?father_module_id=<?php echo $data_father['id']; ?>"></a>
+                            <a class="btn publish" href="publish.php?<?php echo "father_module_id=".$data_father['id']."&son_module_id=".$data_son['id'];?>"></a>
 				<div class="pages">
 					<?php 
-					$page=page($count_all,3);
+					$page=page($count_all,1);
 					echo $page['html'];
 					?>
 				</div>
@@ -63,14 +69,15 @@ $template['css']=array('style/public.css','style/list.css');
 		<div style="clear:both;"></div>
 		<ul class="postsList">
 			<?php 
-			$query="select 
-sfk_content.title,sfk_content.id,sfk_content.time,sfk_content.times,sfk_member.name,sfk_member.photo,sfk_son_module.module_name, sfk_son_module.id module_id
-from sfk_content,sfk_member,sfk_son_module where 
-sfk_content.module_id in({$id_son}) and 
-sfk_content.member_id=sfk_member.id and 
-sfk_content.module_id=sfk_son_module.id {$page['limit']}";
+			$query="select
+			sfk_content.title,sfk_content.id,sfk_content.time,sfk_content.times,sfk_member.name,sfk_member.photo
+			from sfk_content,sfk_member where
+			sfk_content.module_id={$_GET['id']} and
+			sfk_content.member_id=sfk_member.id
+			{$page['limit']}";
 			$result_content=execute($link,$query);
-			while($data_content=mysqli_fetch_assoc($result_content)){?>
+			while($data_content=mysqli_fetch_assoc($result_content)){
+			?>
 			<li>
 				<div class="smallPic">
 					<a href="#">
@@ -78,7 +85,7 @@ sfk_content.module_id=sfk_son_module.id {$page['limit']}";
 					</a>
 				</div>
 				<div class="subject">
-					<div class="titleWrap"><a href="list_son.php?id=<?php echo $data_content['module_id']; ?>">[<?php echo $data_content['module_name']?>]</a>&nbsp;&nbsp;<h2><a href="show.php?id=<?php echo $data_content['id']; ?>"><?php echo $data_content['title']?></a></h2></div>
+					<div class="titleWrap"><h2><a href="show.php?id=<?php echo $data_content['id']; ?>"><?php echo $data_content['title']?></a></h2></div>
 					<p>
 						楼主：<?php echo $data_content['name']?>&nbsp;<?php echo $data_content['time']?>&nbsp;&nbsp;&nbsp;&nbsp;最后回复：2014-12-08
 					</p>
@@ -93,12 +100,10 @@ sfk_content.module_id=sfk_son_module.id {$page['limit']}";
 				</div>
 				<div style="clear:both;"></div>
 			</li>
-			<?php 
-			}
-			?>
+			<?php }?>
 		</ul>
 		<div class="pages_wrap">
-			<a class="btn publish" href="publish.php?father_module_id=<?php echo $data_father['id']; ?>"></a>
+			<a class="btn publish" href="publish.php?<?php echo "father_module_id=".$data_father['id']."&son_module_id=".$data_son['id'];?>"></a>
 			<div class="pages">
 				<?php 
 				echo $page['html'];
@@ -124,7 +129,7 @@ sfk_content.module_id=sfk_son_module.id {$page['limit']}";
 						$result_son=execute($link, $query);
 						while($data_son=mysqli_fetch_assoc($result_son)){
 						?>
-						<li><h3><a href="#"><?php echo $data_son['module_name']?></a></h3></li>
+						<li><h3><a href="list_son.php?id=<?php echo $data_son['id']?>"><?php echo $data_son['module_name']?></a></h3></li>
 						<?php 
 						}
 						?>

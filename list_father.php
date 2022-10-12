@@ -63,14 +63,18 @@ $template['css']=array('style/public.css','style/list.css');
 		<div style="clear:both;"></div>
 		<ul class="postsList">
 			<?php 
-			$query="select 
-sfk_content.title,sfk_content.id,sfk_content.time,sfk_content.times,sfk_member.name,sfk_member.photo,sfk_son_module.module_name, sfk_son_module.id module_id
-from sfk_content,sfk_member,sfk_son_module where 
-sfk_content.module_id in({$id_son}) and 
-sfk_content.member_id=sfk_member.id and 
-sfk_content.module_id=sfk_son_module.id {$page['limit']}";
-			$result_content=execute($link,$query);
-			while($data_content=mysqli_fetch_assoc($result_content)){?>
+                            $query="select 
+                            sfk_content.title,sfk_content.id,sfk_content.time,sfk_content.times,sfk_member.name,sfk_member.photo,sfk_son_module.module_name, sfk_son_module.id module_id
+                            from sfk_content,sfk_member,sfk_son_module where 
+                            sfk_content.module_id in({$id_son}) and 
+                            sfk_content.member_id=sfk_member.id and 
+                            sfk_content.module_id=sfk_son_module.id {$page['limit']}";
+                            $result_content=execute($link,$query);
+                        
+                            while($data_content=mysqli_fetch_assoc($result_content)){
+                                $query = "select count(*) from sfk_reply where content_id={$data_content['id']}";
+                                $num_reply = num($link, $query);
+                            ?>
 			<li>
 				<div class="smallPic">
 					<a href="#">
@@ -85,7 +89,7 @@ sfk_content.module_id=sfk_son_module.id {$page['limit']}";
 				</div>
 				<div class="count">
 					<p>
-						回复<br /><span>41</span>
+						回复<br /><span><?php echo $num_reply; ?></span>
 					</p>
 					<p>
 						浏览<br /><span><?php echo $data_content['times']?></span>
@@ -124,7 +128,7 @@ sfk_content.module_id=sfk_son_module.id {$page['limit']}";
 						$result_son=execute($link, $query);
 						while($data_son=mysqli_fetch_assoc($result_son)){
 						?>
-						<li><h3><a href="#"><?php echo $data_son['module_name']?></a></h3></li>
+                                            <li><h3><a href="list_son.php?id=<?php echo $data_son['id'] ?>"><?php echo $data_son['module_name']?></a></h3></li>
 						<?php 
 						}
 						?>

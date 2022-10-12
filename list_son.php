@@ -59,7 +59,7 @@ $template['css']=array('style/public.css','style/list.css');
                             <a class="btn publish" href="publish.php?<?php echo "father_module_id=".$data_father['id']."&son_module_id=".$data_son['id'];?>"></a>
 				<div class="pages">
 					<?php 
-					$page=page($count_all,1);
+					$page=page($count_all,3,1);
 					echo $page['html'];
 					?>
 				</div>
@@ -77,6 +77,8 @@ $template['css']=array('style/public.css','style/list.css');
 			{$page['limit']}";
 			$result_content=execute($link,$query);
 			while($data_content=mysqli_fetch_assoc($result_content)){
+                            $query = "select count(*) from sfk_reply where content_id={$data_content['id']}";
+                            $reply_count = num($link, $query);
 			?>
 			<li>
 				<div class="smallPic">
@@ -92,7 +94,7 @@ $template['css']=array('style/public.css','style/list.css');
 				</div>
 				<div class="count">
 					<p>
-						回复<br /><span>41</span>
+						回复<br /><span><?php echo $reply_count; ?></span>
 					</p>
 					<p>
 						浏览<br /><span><?php echo $data_content['times']?></span>

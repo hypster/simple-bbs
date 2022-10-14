@@ -27,7 +27,7 @@ foreach ($template['css'] as $val){
 			<div class="login">
                             <?php 
                             if ($member_id) {
-                                echo "<span style='color:#fff'>欢迎回来, {$_COOKIE['sfk']['name']}</span> <a href='logout.php'>退出</a>";
+                                echo "<span style='color:#fff'>欢迎回来, <a href='member.php?id={$member_id}'>{$_COOKIE['sfk']['name']}</a></span> <a href='logout.php'>退出</a>";
                             } else {
                                 echo "<a href='login.php'>登录</a>&nbsp;
 				<a href='register.php'>注册</a>";

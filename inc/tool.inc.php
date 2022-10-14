@@ -1,4 +1,4 @@
-<?php 
+ <?php 
 function skip($url,$pic,$message){
 $html=<<<A
 <!DOCTYPE html>
@@ -29,6 +29,14 @@ function is_login($link){
 		}else{
 			return false;
 		}
+	}else{
+		return false;
+	}
+}
+
+function check_user($member_id,$content_member_id){
+	if($member_id==$content_member_id){
+		return true;
 	}else{
 		return false;
 	}

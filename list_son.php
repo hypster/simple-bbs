@@ -70,7 +70,7 @@ $template['css']=array('style/public.css','style/list.css');
 		<ul class="postsList">
 			<?php 
 			$query="select
-			sfk_content.title,sfk_content.id,sfk_content.time,sfk_content.times,sfk_member.name,sfk_member.photo
+			sfk_content.title,sfk_content.id,sfk_content.time,sfk_content.times,sfk_member.name,sfk_member.photo, sfk_member.id member_id 
 			from sfk_content,sfk_member where
 			sfk_content.module_id={$_GET['id']} and
 			sfk_content.member_id=sfk_member.id
@@ -82,7 +82,7 @@ $template['css']=array('style/public.css','style/list.css');
 			?>
 			<li>
 				<div class="smallPic">
-					<a href="#">
+                                    <a href="member.php?id=<?php echo $data_content['member_id']; ?>">
 						<img width="45" height="45"src="<?php if($data_content['photo']!=''){echo $data_content['photo'];}else{echo 'style/photo.jpg';}?>">
 					</a>
 				</div>

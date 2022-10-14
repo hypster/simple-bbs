@@ -68,7 +68,7 @@ $template['css']=array('style/public.css','style/show.css');
 				</a>
 			</div>
 			<div class="name">
-				<a href=""><?php echo $data_content['name']?></a>
+                            <a href="member.php?id=<?php echo $data_content['member_id']; ?>"><?php echo $data_content['name']?></a>
 			</div>
 		</div>
 		<div class="right">
@@ -100,7 +100,7 @@ $template['css']=array('style/public.css','style/show.css');
 				</a>
 			</div>
 			<div class="name">
-				<a href=""><?php echo $data_reply['name']; ?></a>
+				<a href="member.php?id=<?php echo $data_reply['member_id'];?>"><?php echo $data_reply['name']; ?></a>
 			</div>
 		</div>
 		<div class="right">

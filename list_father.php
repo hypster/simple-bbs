@@ -22,7 +22,7 @@ $id_son='';
 $son_list='';
 while($data_son=mysqli_fetch_assoc($result_son)){
 	$id_son.=$data_son['id'].',';
-	$son_list.="<a>{$data_son['module_name']}</a> ";
+	$son_list.="<a href='list_son.php?id={$data_son['id']}'>{$data_son['module_name']}</a> ";
 }
 $id_son=trim($id_son,',');
 if($id_son==''){
@@ -64,7 +64,7 @@ $template['css']=array('style/public.css','style/list.css');
 		<ul class="postsList">
 			<?php 
                             $query="select 
-                            sfk_content.title,sfk_content.id,sfk_content.time,sfk_content.times,sfk_member.name,sfk_member.photo,sfk_son_module.module_name, sfk_son_module.id module_id
+                            sfk_content.title,sfk_content.id,sfk_content.time,sfk_content.times,sfk_member.name,sfk_member.photo, sfk_member.id member_id, sfk_son_module.module_name, sfk_son_module.id module_id
                             from sfk_content,sfk_member,sfk_son_module where 
                             sfk_content.module_id in({$id_son}) and 
                             sfk_content.member_id=sfk_member.id and 
@@ -77,7 +77,7 @@ $template['css']=array('style/public.css','style/list.css');
                             ?>
 			<li>
 				<div class="smallPic">
-					<a href="#">
+					<a href="member.php?id=<?php echo $data_content['member_id']; ?>">
 						<img width="45" height="45"src="<?php if($data_content['photo']!=''){echo $data_content['photo'];}else{echo 'style/photo.jpg';}?>">
 					</a>
 				</div>

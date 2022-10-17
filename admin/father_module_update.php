@@ -5,6 +5,7 @@ include_once '../inc/tool.inc.php';
 $template['title']='父版块-修改';
 $template['css']=array('style/public.css');
 $link=connect();
+include_once 'inc/is_manage_login.inc.php';//验证管理员是否登录
 if(!isset($_GET['id']) || !is_numeric($_GET['id'])){
 	skip('father_module.php','error','id参数错误！');
 }

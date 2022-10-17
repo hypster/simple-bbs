@@ -3,8 +3,10 @@ include_once 'inc/config.inc.php';
 include_once 'inc/mysql.inc.php';
 include_once 'inc/tool.inc.php';
 $link=connect();
-if(!$member_id=is_login($link)){
-	skip('login.php', 'error', '请没有登录!');
+$member_id=is_login($link);
+$is_manage_login = is_manage_login($link);
+if(!$member_id && !$is_manage_login){
+	skip('login.php', 'error', '你没有登录!');
 }
 if(!isset($_GET['id']) || !is_numeric($_GET['id'])){
 	skip('index.php', 'error', '帖子id参数不合法!');
@@ -14,16 +16,19 @@ $result_content=execute($link, $query);
 if(mysqli_num_rows($result_content)==1){
 	$data_content=mysqli_fetch_assoc($result_content);
 	$data_content['title']=htmlspecialchars($data_content['title']);
-	if(check_user($member_id,$data_content['member_id'])){
+	if($is_manage_login || check_user($member_id,$data_content['member_id'])){
 		if(isset($_POST['submit'])){
 			include 'inc/check_publish.inc.php';
 			$_POST=escape($link, $_POST);
 			$query="update sfk_content set module_id={$_POST['module_id']},title='{$_POST['title']}',content='{$_POST['content']}' where id={$_GET['id']}";
 			execute($link, $query);
+                        if(!isset($_GET['return_url'])) {
+                            $_GET['return_url'] = "member.php?id={$data_content['member_id']}";
+                        }
 			if(mysqli_affected_rows($link)==1){
-				skip("member.php?id={$member_id}", 'ok', '修改成功！');
+				skip($_GET['return_url'], 'ok', '修改成功！');
 			}else{
-				skip("member.php?id={$member_id}", 'error', '修改失败，请重试！');
+				skip($_GET['return_url'], 'error', '修改失败，请重试！');
 			}
 		}
 	}else{

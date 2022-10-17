@@ -5,7 +5,7 @@ include_once 'inc/tool.inc.php';
 include_once 'inc/page.inc.php';
 $link=connect();
 $member_id=is_login($link);
-
+$is_manage_login = is_manage_login($link);
 if(!isset($_GET['id']) || !is_numeric($_GET['id'])){
 	skip('index.php', 'error', '父版块id参数不合法!');
 }
@@ -74,6 +74,13 @@ $template['css']=array('style/public.css','style/list.css');
                             while($data_content=mysqli_fetch_assoc($result_content)){
                                 $query = "select count(*) from sfk_reply where content_id={$data_content['id']}";
                                 $num_reply = num($link, $query);
+                                $query = "select time from sfk_reply where content_id={$data_content['id']} order by time desc limit 1";
+                                $result_last_reply = execute($link, $query);
+                                if(mysqli_num_rows($result_last_reply) === 0) {
+                                    $last_time = "暂无";
+                                }else {
+                                    $last_time = mysqli_fetch_assoc($result_last_reply)['time'];
+                                }
                             ?>
 			<li>
 				<div class="smallPic">
@@ -84,8 +91,17 @@ $template['css']=array('style/public.css','style/list.css');
 				<div class="subject">
 					<div class="titleWrap"><a href="list_son.php?id=<?php echo $data_content['module_id']; ?>">[<?php echo $data_content['module_name']?>]</a>&nbsp;&nbsp;<h2><a href="show.php?id=<?php echo $data_content['id']; ?>"><?php echo $data_content['title']?></a></h2></div>
 					<p>
-						楼主：<?php echo $data_content['name']?>&nbsp;<?php echo $data_content['time']?>&nbsp;&nbsp;&nbsp;&nbsp;最后回复：2014-12-08
+						楼主：<?php echo $data_content['name']?>&nbsp;<?php echo $data_content['time']?>&nbsp;&nbsp;&nbsp;&nbsp;最后回复：<?php echo $last_time; ?>
 					</p>
+                                        <?php 
+                                            if ($is_manage_login || check_user($member_id, $data_content['member_id'])){
+                                                $return_url=urlencode($_SERVER['REQUEST_URI']);
+                                                $url=urlencode("content_delete.php?id={$data_content['id']}&return_url={$return_url}");
+                                                $message="你真的要删除帖子 {$data_content['title']} 吗？";
+                                                $delete_url="confirm.php?url={$url}&return_url={$return_url}&message={$message}";
+                                                echo "<a href='content_update.php?id={$data_content['id']}&return_url={$return_url}'>编辑</a> <a href='{$delete_url}'>删除</a>";
+                                            }
+                                        ?>
 				</div>
 				<div class="count">
 					<p>

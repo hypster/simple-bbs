@@ -63,7 +63,7 @@ $template['css']=array('style/public.css','style/show.css');
             <div class="wrapContent">
 		<div class="left">
 			<div class="face">
-				<a target="_blank" href="">
+				<a target="_blank" href="member.php?id=<?php echo $data_content['member_id']; ?>">
 					<img width=120 height=120 src="<?php if($data_content['photo']!=''){echo $data_content['photo'];}else{echo 'style/photo.jpg';}?>" />
 				</a>
 			</div>

@@ -5,6 +5,7 @@ include_once '../inc/tool.inc.php';
 $template['title']='子版块添加页';
 $template['css']=array('style/public.css');
 $link=connect();
+include_once 'inc/is_manage_login.inc.php';//验证管理员是否登录
 if(isset($_POST['submit'])){
 	//验证用户填写的信息
 	$check_flag='add';

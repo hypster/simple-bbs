@@ -24,9 +24,9 @@ foreach ($template['css'] as $val){
 				<a href='/learn/bbs' class="hover">首页</a>
 			</div>
 			<div class="serarch">
-				<form>
+                            <form method="GET" action="search.php">
 					<input class="keyword" type="text" name="keyword" placeholder="搜索其实很简单" />
-					<input class="submit" type="submit" name="submit" value="" />
+					<input class="submit" type="submit" value="" />
 				</form>
 			</div>
 			<div class="login">

@@ -80,11 +80,11 @@ function page($count,$page_size,$num_btn=10,$page='page'){
 			$key_end=key($html);
 			if($key_first!=1){
 				array_shift($html);
-				array_unshift($html,"<a href='{$url}=1'>1...</a>");
+				array_unshift($html,"<a href='{$url}1'>1...</a>");
 			}
 			if($key_end!=$page_num_all){
 				array_pop($html);
-				array_push($html,"<a href='{$url}={$page_num_all}'>...{$page_num_all}</a>");
+				array_push($html,"<a href='{$url}{$page_num_all}'>...{$page_num_all}</a>");
 			}
 		}
 	}

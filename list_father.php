@@ -53,7 +53,7 @@ $template['css']=array('style/public.css','style/list.css');
                             <a class="btn publish" href="publish.php?father_module_id=<?php echo $data_father['id']; ?>"></a>
 				<div class="pages">
 					<?php 
-					$page=page($count_all,3);
+					$page=page($count_all,3, 3);
 					echo $page['html'];
 					?>
 				</div>

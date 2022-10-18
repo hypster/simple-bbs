@@ -59,7 +59,7 @@ $template['css']=array('style/public.css','style/list.css');
                             <a class="btn publish" href="publish.php?<?php echo "father_module_id=".$data_father['id']."&son_module_id=".$data_son['id'];?>"></a>
 				<div class="pages">
 					<?php 
-					$page=page($count_all,3,1);
+					$page=page($count_all,3,3);
 					echo $page['html'];
 					?>
 				</div>
@@ -79,6 +79,14 @@ $template['css']=array('style/public.css','style/list.css');
 			while($data_content=mysqli_fetch_assoc($result_content)){
                             $query = "select count(*) from sfk_reply where content_id={$data_content['id']}";
                             $reply_count = num($link, $query);
+                            if ($reply_count) {
+                                $query = "select time from sfk_reply order by time desc limit 1";
+                                $reply_last = execute($link, $query);
+                                $last_time = mysqli_fetch_assoc($reply_last)['time'];
+                            } else {
+                                $last_time = "暂无";
+                            }
+                            
 			?>
 			<li>
 				<div class="smallPic">
@@ -89,7 +97,7 @@ $template['css']=array('style/public.css','style/list.css');
 				<div class="subject">
 					<div class="titleWrap"><h2><a href="show.php?id=<?php echo $data_content['id']; ?>"><?php echo $data_content['title']?></a></h2></div>
 					<p>
-						楼主：<?php echo $data_content['name']?>&nbsp;<?php echo $data_content['time']?>&nbsp;&nbsp;&nbsp;&nbsp;最后回复：2014-12-08
+						楼主：<?php echo $data_content['name']?>&nbsp;<?php echo $data_content['time']?>&nbsp;&nbsp;&nbsp;&nbsp;最后回复：<?php echo $last_time; ?>
 					</p>
 				</div>
 				<div class="count">
